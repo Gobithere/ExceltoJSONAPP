@@ -5,7 +5,7 @@ const chalk = require('chalk');
 
 const cfonts = require('cfonts');
 
-const Exeltojson= ()=>require ('./Exeltojson');
+const Exeltojson = () => require('./Exeltojson');
 
 const { Chalk } = require('cfonts/lib/Chalk');
 
@@ -30,27 +30,68 @@ cfonts.say('Excel to JSON| RUNNING... ', {
   env: 'node',
 });
 
-function getOptions() {
-  readline.question(
-    '\n[1]: Çıkış: Exit + Enter \n' + "[2]: Convert to JSON: JSON + Enter\n",
+
+function getOptions2(path) {
+  readline.question('\n[1]: Initiate Validator\n' + "[2]: Without Validator\n" + "Pick Option: ",
     (answer) => {
       try {
-        if (answer == 'Exit') {
+        console.log('Excel Validator is Checking Status...\n');
+
+        if (answer == '1') {
+          
+          excelValidator(path);
+          
+
+        }
+
+        else if (answer == '2') {
+          console.log(chalk.yellow.bold('\nConverter Initiating...\n'));
+          Exeltojson();
+
+          readline.close();
+
+
+        }
+
+        else {
+          throw 'Unknown Option, Ex: Type 1 to pick option 1';
+        }
+
+      }
+      catch (err) {
+        console.log('\n' + chalk.red.bold(err) + '...\n');
+        
+
+      }
+    })
+
+
+};
+
+
+
+
+async function getOptions() {
+  readline.question(
+    '\n[1]: Exit  \n' + "[2]: Convert to JSON\n",
+    (answer) => {
+      try {
+        if (answer == '1') {
           cfonts.say('BYE :(', {
             font: '',
             align: 'center',
           });
           readline.close();
-        } 
-        else if (answer == 'JSON') {
-
-          console. log(chalk.yellow.bold('\nConverter Initiating...\n'));
-
-        Exeltojson();
-        readline.close();
-        
         }
-        
+        else if (answer == '2') {
+
+          console.log(chalk.yellow.bold('\nConverter Initiating...\n'));
+
+          Exeltojson();
+          readline.close();
+
+        }
+
         else {
           throw 'Bilinmeyen Seçenek';
         }
@@ -92,10 +133,13 @@ async function isimkontrol(filePath) {
 
 async function excelValidator(filePath) {
   try {
+
+    
+
     const workbook = excelfile.readFile(filePath + '.xlsx'); //default olarak ilk sayfa valide olur.
     const Sayfa1 = workbook.SheetNames[0];
     const ws = workbook.Sheets[`${Sayfa1}`];
-    console.log('Excel Validator is Checking Status...\n');
+    console.log(chalk.yellow.bold('------------Validator Initiated------------\n'));
 
     let validKırılım = false;
     let komponentSayısı = komponent.excelKomponentSayısı(ws);
@@ -121,28 +165,28 @@ async function excelValidator(filePath) {
 
     validKırılım & kontroledilmişIsım
       ? console.log(
-          'Proje Konfigürasyon Exceli --STATUS: ' +
-            chalk.red.bold('INVALID>> ') +
-            'Konfigürasyon Kırılım Seviyesinde Mantıksal Hata\n ' +
-            '                          --STATUS: ' +
-            chalk.red.bold('INVALID>> ') +
-            'Unique Olmayan Komponent İsmi Mevcut\n'
-        )
+        'Proje Konfigürasyon Exceli --STATUS: ' +
+        chalk.red.bold('INVALID>> ') +
+        'Konfigürasyon Kırılım Seviyesinde Mantıksal Hata\n ' +
+        '                          --STATUS: ' +
+        chalk.red.bold('INVALID>> ') +
+        'Unique Olmayan Komponent İsmi Mevcut\n'
+      )
       : validKırılım
-      ? console.log(
+        ? console.log(
           'Proje Konfigürasyon Exceli --STATUS: ' +
-            chalk.red.bold('INVALID>> ') +
-            'Konfigürasyon Kırılım Seviyesinde Mantıksal Hata\n '
+          chalk.red.bold('INVALID>> ') +
+          'Konfigürasyon Kırılım Seviyesinde Mantıksal Hata\n '
         )
-      : kontroledilmişIsım
-      ? console.log(
-          'Proje Konfigürasyon Exceli --STATUS: ' +
+        : kontroledilmişIsım
+          ? console.log(
+            'Proje Konfigürasyon Exceli --STATUS: ' +
             chalk.red.bold('INVALID>> ') +
             'Unique Olmayan Komponent İsmi Mevcut'
-        )
-      : console.log(
-          'Proje Konfigürasyon Exceli --STATUS: ' + chalk.green.bold('VALID\n')
-        );
+          )
+          : console.log(
+            'Proje Konfigürasyon Exceli --STATUS: ' + chalk.green.bold('VALID\n')
+          );
 
     getOptions();
   } catch (err) {
@@ -152,18 +196,20 @@ async function excelValidator(filePath) {
         'Excel Dosyasının EXELTOJSON Klasörü Altında Olduğunda Emin Olununuz'
       )
     );
-    readline.question('Excel Dosyasının Adını Giriniz:', (answer) =>
+    readline.question('Excel Dosyasının Adını Giriniz:', (answer) => 
       excelValidator(answer)
+      
     );
   }
 }
 
 //excelValidator('sampleexcel');
-readline.question("Çevirmek İstediğiniz Excel Dosyasının Adını Giriniz:", (answer) =>
-  excelValidator(answer)
+readline.question("Please Enter to Start", (answer) =>
+
+  getOptions2(answer)
 );
 
 // Cfonts modulü eklenecek. Uygulamanın açılış yazısı ve bilgilendirmeleri
 // yazdırılacak.
 
-module.exports = getOptions(); 
+//module.exports = getOptions(); 

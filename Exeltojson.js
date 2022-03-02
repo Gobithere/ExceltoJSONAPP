@@ -1,6 +1,6 @@
 const excel = require('xlsx');
 const komponent = require('./KomponentClass');
-const getOptions = ()=> require('./excelValidatorapp')
+//const getOptions = ()=> require('./excelValidatorapp')
 
 const excelFile = excel.readFile('./sampleexcel.xlsx');
 const Sayfa1 = excelFile.SheetNames[0];

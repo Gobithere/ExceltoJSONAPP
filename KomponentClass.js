@@ -8,6 +8,8 @@ const workbook = excelfile.readFile('./sampleexcel.xlsx');
 
 const ws = workbook.Sheets['Sayfa1'];
 
+
+
 const kompDataArray = [];
 
 class komponent {
